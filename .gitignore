@@ -25,3 +25,9 @@ nativedroid/venv/*
 MANIFEST
 
 bazel-*
+
+
+#Yinliu added
+/bin
+/lib
+pyvenv.cfg
