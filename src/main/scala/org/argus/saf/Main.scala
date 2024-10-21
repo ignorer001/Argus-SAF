@@ -18,6 +18,8 @@ import org.argus.jnsaf.server.JNSafServer
 import org.argus.jnsaf.submitter.{ApkSubmitter, BenchmarkSubmitter}
 import org.argus.saf.cli._
 
+import org.argus.jnsaf.cggen._
+
 /**
   * @author <a href="mailto:fgwei521@gmail.com">Fengguo Wei</a>
   */
@@ -174,6 +176,12 @@ object Main extends App {
       }
       else if (opt.equalsIgnoreCase("benchmark")) {
         cmdBenchmarkSubmitter(commandLine)
+        cmdFound = true
+      }
+      //Yin Liu added
+      else if(opt.equalsIgnoreCase("cg") || opt.equalsIgnoreCase("callgraph")) {
+        println("generate call graph")
+        cmdCGGen(commandLine)
         cmdFound = true
       }
     }
@@ -360,6 +368,35 @@ object Main extends App {
         System.exit(0)
     }
     ApkSubmitter(outputPath, address, port, approach)
+  }
+
+  //YinLiu added
+  private def cmdCGGen(cli: CommandLine): Unit = {
+    println("in cmdCGGen")
+    var outputPath: String = null
+    var address: String = null
+    var port: Int = 0
+    var approach: TaintAnalysisApproach.Value = TaintAnalysisApproach.BOTTOM_UP
+    if(cli.hasOption("a") || cli.hasOption("approach")) {
+      approach = cli.getOptionValue("a") match {
+        case "BOTTOM_UP" => TaintAnalysisApproach.BOTTOM_UP
+        case "COMPONENT_BASED" => TaintAnalysisApproach.COMPONENT_BASED
+      }
+    }
+    try {
+      outputPath = cli.getArgList.get(1)
+      address = cli.getArgList.get(2)
+      port = cli.getArgList.get(3).toInt
+    } catch {
+      case _: Exception =>
+        usage(Mode.APK_SUBMITTER)
+        System.exit(0)
+    }
+    println("outputPath == "+ outputPath)
+    println("address == "+ address)
+    println("port == "+ port)
+    // ApkSubmitter(outputPath, address, port, approach)
+    CGGen(outputPath, address, port, approach)
   }
 
   private def cmdBenchmarkSubmitter(cli: CommandLine): Unit = {
