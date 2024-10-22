@@ -1,3 +1,29 @@
+# Setup of this Modified Argus-SAF Version
+
+1. git clone the main branch
+
+2. check your python version, install and set it to python2.x (Python 2.7.18 works well)
+
+3. install and use virtualenv to make a virtual env for Argus-SAF folder
+  ```
+  $ virtualenv Argus-SAF
+  $ cd  Argus-SAF
+  $ source bin/activate
+  ```
+4. build the tool (will generate the tool's jar file)
+
+  ```
+  $ tools/scripts/install.sh jnsaf
+  $ tools/scripts/install.sh nativedroid (option)
+  ```
+
+5. replace the correct path in /home/tiger/My_Work/Argus-SAF/tools/scripts/mytest.sh
+
+6. run and check
+  ```
+  $ tools/scripts/mytest.sh
+  ```
+
 # Argus-SAF: Argus static analysis framework
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Build Status](https://travis-ci.org/arguslab/Argus-SAF.svg?branch=master)](https://travis-ci.org/arguslab/Argus-SAF)

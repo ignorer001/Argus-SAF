@@ -373,8 +373,8 @@ object Main extends App {
   //YinLiu added
   private def cmdCGGen(cli: CommandLine): Unit = {
     println("in cmdCGGen")
+    var apkPath: String = null
     var outputPath: String = null
-    var address: String = null
     var port: Int = 0
     var approach: TaintAnalysisApproach.Value = TaintAnalysisApproach.BOTTOM_UP
     if(cli.hasOption("a") || cli.hasOption("approach")) {
@@ -384,19 +384,19 @@ object Main extends App {
       }
     }
     try {
-      outputPath = cli.getArgList.get(1)
-      address = cli.getArgList.get(2)
+      apkPath = cli.getArgList.get(1)
+      outputPath = cli.getArgList.get(2)
       port = cli.getArgList.get(3).toInt
     } catch {
       case _: Exception =>
         usage(Mode.APK_SUBMITTER)
         System.exit(0)
     }
+    println("apkPath == "+ apkPath)
     println("outputPath == "+ outputPath)
-    println("address == "+ address)
     println("port == "+ port)
-    // ApkSubmitter(outputPath, address, port, approach)
-    CGGen(outputPath, address, port, approach)
+    // ApkSubmitter(apkPath, outputPath, port, approach)
+    CGGen(apkPath, outputPath, port, approach)
   }
 
   private def cmdBenchmarkSubmitter(cli: CommandLine): Unit = {

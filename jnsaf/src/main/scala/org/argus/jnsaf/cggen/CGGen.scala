@@ -27,11 +27,11 @@ import org.argus.jawa.flow.JawaAlirInfoProvider
 
 
 object CGGen {
-  def apply(sourcePath: String, address: String, port: Int, approach: TaintAnalysisApproach.Value): Unit = {
+  def apply(apkPath: String, outputPath: String, port: Int, approach: TaintAnalysisApproach.Value): Unit = {
     println("in CGGen's apply")
     println("usage: apk_path output_path")
-    val apk_path = sourcePath
-    val output_path = address
+    val apk_path = apkPath
+    val output_path = outputPath
     val fileUri = FileUtil.toUri(apk_path)
     val outputUri = FileUtil.toUri(output_path)
     val reporter = new DefaultReporter
