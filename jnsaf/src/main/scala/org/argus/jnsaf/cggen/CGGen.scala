@@ -49,6 +49,9 @@ object CGGen {
     val component_infos = apk.model.getComponentInfos // ComponentInfo(compType: [class type], typ: [ACTIVITY, SERVICE, RECEIVER, PROVIDER], exported: Boolean, enabled: Boolean, permission: ISet[String])
     val intent_filter = apk.model.getIntentFilterDB // IntentFilterDB contains intent filter information for each component.
     val environment_map = apk.model.getEnvMap // environment method map
+    val layout_ctrl = apk.model.getLayoutControls
+    val layout_ctrl_more = apk.model.getLayoutControlsMoreInfo
+    val comps = apk.model.getComponents
 
     println("appName="+ appName)
     println("certificate=", certificate)
@@ -56,6 +59,9 @@ object CGGen {
     println("component_infos=", component_infos)
     println("intent_filter=", intent_filter)
     println("environment_map=", environment_map)
+    println("comps=", comps)
+    println("layout_ctrl=", layout_ctrl)
+    println("layout_ctrl_more=", layout_ctrl_more)
 
 
     apk.model.getComponents foreach { comp =>

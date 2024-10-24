@@ -225,6 +225,7 @@ object AppInfoCollector {
     apk.model.addUsesPermissions(mfp.getPermissions)
     apk.model.updateIntentFilterDB(mfp.getIntentDB)
     apk.model.addLayoutControls(lfp.getUserControls)
+    apk.model.addLayoutControlsMoreInfo(lfp.getUserControlsMoreInfo)
     val nativeActivity = apk.getClassOrResolve(new JawaType("android.app.NativeActivity"))
     mfp.getComponentInfos.foreach { f =>
       if(f.enabled){

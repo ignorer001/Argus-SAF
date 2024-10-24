@@ -14,7 +14,7 @@ import org.argus.jawa.core.util._
 import org.argus.amandroid.core.model.ApkModel
 import org.argus.amandroid.core.appInfo.ApkCertificate
 import org.argus.amandroid.core.decompile.DecompileLayout
-import org.argus.amandroid.core.parser.{ComponentInfo, ComponentType, IntentFilterDataBase, LayoutControl}
+import org.argus.amandroid.core.parser.{ComponentInfo, ComponentType, IntentFilterDataBase, LayoutControl, LayoutControlMoreInfo}
 import org.argus.jawa.core.elements.{JawaType, Signature}
 import org.json4s.{CustomSerializer, Extraction, Formats, JValue}
 import org.json4s.JsonDSL._
@@ -36,6 +36,7 @@ object ApkModelSerializer extends CustomSerializer[ApkModel](format => (
       val callbackMethods = (jv \ "callbackMethods").extract[IMap[JawaType, ISet[Signature]]]
       val componentInfos = (jv \ "componentInfos").extract[ISet[ComponentInfo]]
       val layoutControls = (jv \ "layoutControls").extract[IMap[Int, LayoutControl]]
+      val layoutControlsMoreInfo = (jv \ "layoutControlsMoreInfo").extract[IMap[Int, LayoutControlMoreInfo]]
       val appPackageName = (jv \ "appPackageName").extract[Option[String]]
       val intentFdb = (jv \ "intentFdb").extract[IntentFilterDataBase]
       val codeLineCounter = (jv \ "codeLineCounter").extract[Int]
@@ -52,6 +53,7 @@ object ApkModelSerializer extends CustomSerializer[ApkModel](format => (
       apk.addCallbackMethods(callbackMethods)
       apk.addComponentInfos(componentInfos)
       apk.addLayoutControls(layoutControls)
+      apk.addLayoutControlsMoreInfo(layoutControlsMoreInfo)
       apk.setPackageName(appPackageName.getOrElse(""))
       apk.setIntentFilterDB(intentFdb)
       apk.setCodeLineCounter(codeLineCounter)

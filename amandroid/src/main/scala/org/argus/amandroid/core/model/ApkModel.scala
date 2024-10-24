@@ -13,7 +13,7 @@ package org.argus.amandroid.core.model
 import org.argus.amandroid.core.AndroidConstants
 import org.argus.amandroid.core.appInfo.ApkCertificate
 import org.argus.amandroid.core.decompile.DecompileLayout
-import org.argus.amandroid.core.parser.{ComponentInfo, ComponentType, IntentFilterDataBase, LayoutControl}
+import org.argus.amandroid.core.parser.{ComponentInfo, ComponentType, IntentFilterDataBase, LayoutControl, LayoutControlMoreInfo}
 import org.argus.jawa.core.elements.{JawaType, Signature}
 import org.argus.jawa.core.util._
 
@@ -117,6 +117,7 @@ case class ApkModel(nameUri: FileResourceUri, layout: DecompileLayout) {
   private val callbackMethods: MMap[JawaType, MSet[Signature]] = mmapEmpty
   private val componentInfos: MSet[ComponentInfo] = msetEmpty
   private val layoutControls: MMap[Int, LayoutControl] = mmapEmpty
+  private val layoutControlsMoreInfo: MMap[Int, LayoutControlMoreInfo] = mmapEmpty
   private var appPackageName: String = _
   private val intentFdb: IntentFilterDataBase = new IntentFilterDataBase
   private var codeLineCounter: Int = 0
@@ -136,7 +137,10 @@ case class ApkModel(nameUri: FileResourceUri, layout: DecompileLayout) {
   def getUsesPermissions: ISet[String] = this.uses_permissions.toSet
   def addLayoutControls(i: Int, lc: LayoutControl): Unit = this.layoutControls(i) = lc
   def addLayoutControls(lcs: IMap[Int, LayoutControl]): Unit = this.layoutControls ++= lcs
+  def addLayoutControlsMoreInfo(i: Int, lc: LayoutControlMoreInfo): Unit = this.layoutControlsMoreInfo(i) = lc
+  def addLayoutControlsMoreInfo(lcs: IMap[Int, LayoutControlMoreInfo]): Unit = this.layoutControlsMoreInfo ++= lcs
   def getLayoutControls: IMap[Int, LayoutControl] = this.layoutControls.toMap
+  def getLayoutControlsMoreInfo: IMap[Int, LayoutControlMoreInfo] = this.layoutControlsMoreInfo.toMap
   def addCallbackMethods(typ: JawaType, sigs: ISet[Signature]): Unit = this.callbackMethods.getOrElseUpdate(typ, msetEmpty) ++= sigs
   def addCallbackMethods(map: IMap[JawaType, ISet[Signature]]): Unit = map.foreach {case (k, vs) => this.callbackMethods.getOrElseUpdate(k, msetEmpty) ++= vs}
   def getCallbackMethodMapping: IMap[JawaType, ISet[Signature]] = this.callbackMethods.map {

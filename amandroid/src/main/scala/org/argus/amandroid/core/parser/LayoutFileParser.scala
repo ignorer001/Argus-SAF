@@ -38,6 +38,7 @@ class LayoutFileParser(apk: ApkGlobal, packageName: String, arsc: ARSCFileParser
   private final val DEBUG = false
 
   private final val userControls: MMap[Int, LayoutControl] = mmapEmpty
+  private final val userControlsMoreInfo: MMap[Int, LayoutControlMoreInfo] = mmapEmpty
   private final val callbackMethods: MMap[String, MSet[String]] = mmapEmpty
   private final val includes: MMap[String, MSet[Int]] = mmapEmpty
   
@@ -110,9 +111,11 @@ class LayoutFileParser(apk: ApkGlobal, packageName: String, arsc: ARSCFileParser
    */
   private def isActionListener(name: String): Boolean = name.endsWith("onClick")
   
-  private def visitLayoutNode(fileName: String, n: Node): (Int, Boolean) = {
+  private def visitLayoutNode(fileName: String, n: Node): (Int, String, String, Boolean) = {
     var id: Int = -1
     var isSensitive = false
+    var fName: String = fileName
+    var idName: String = ""
     try {
       val attrs = n.getAttributes
       for(i <- 0 until attrs.getLength) {
@@ -123,6 +126,7 @@ class LayoutFileParser(apk: ApkGlobal, packageName: String, arsc: ARSCFileParser
         val n = nname.trim
         if(n.endsWith(":id")) {
           val index = nobj.asInstanceOf[String]
+          idName = index
           id = getID(index).getOrElse(-1)
         }
         else if(n.endsWith(":password"))
@@ -139,7 +143,7 @@ class LayoutFileParser(apk: ApkGlobal, packageName: String, arsc: ARSCFileParser
     } catch {
       case _: Exception =>
     }
-    (id, isSensitive)
+    (id, idName, fName, isSensitive)
   }
   
   private def isIndex(str: String): Boolean = str.startsWith("@")
@@ -183,9 +187,11 @@ class LayoutFileParser(apk: ApkGlobal, packageName: String, arsc: ARSCFileParser
                 getLayoutClass(nname.trim())
               } else None
             if (isLayoutClass(theClass) || isViewClass(theClass)) {
-              val (id, isSensitive) = visitLayoutNode(fileName, cn)
+              // val (id, isSensitive) = visitLayoutNode(fileName, cn)
+              val (id, idName, fName, isSensitive) = visitLayoutNode(fileName, cn)
               if (id > 0)
                 userControls += (id -> LayoutControl(id, theClass.get.getType, isSensitive))
+                userControlsMoreInfo += (id -> LayoutControlMoreInfo(id, idName, fName, theClass.get.getType, isSensitive))
             }
             worklist = worklist :+ cn.getChildNodes
           }
@@ -216,6 +222,8 @@ class LayoutFileParser(apk: ApkGlobal, packageName: String, arsc: ARSCFileParser
    * @return The layout controls found in the XML file.
    */
   def getUserControls: IMap[Int, LayoutControl] = this.userControls.toMap
+
+  def getUserControlsMoreInfo: IMap[Int, LayoutControlMoreInfo] = this.userControlsMoreInfo.toMap
 
   /**
    * Gets the callback methods found in the layout XML file. The result is a
