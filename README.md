@@ -2,13 +2,12 @@
 
 1. git clone the main branch
 
-2. check Java environment, make sure it is Java 1.8
-
-  below Java environment works well
-
+2. check Java environment, make sure it is Java 1.8 (below Java environment works well)
+  ```
   java version "1.8.0_421"
   Java(TM) SE Runtime Environment (build 1.8.0_421-b09)
   Java HotSpot(TM) 64-Bit Server VM (build 25.421-b09, mixed mode)
+  ```
 
 2. check your python version, install and set it to python2.x (Python 2.7.18 works well)
 
